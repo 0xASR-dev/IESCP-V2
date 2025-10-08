@@ -1,48 +1,981 @@
 {% extends "base.html" %} 
-{% block title %} Home page {% endblock %} 
+{% block title %} Home - Influencer Engagement Platform {% endblock %} 
 {% block content%}
 <style>
-  .card-container {
+  :root {
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --accent-color: #ec4899;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --dark-bg: #0f172a;
+    --dark-secondary: #1e293b;
+    --light-bg: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    color: white;
+    padding: 120px 0 100px;
+    margin: -20px -15px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    animation: pulseGlow 8s ease-in-out infinite;
+  }
+
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="1.5" fill="rgba(255,255,255,0.2)"/></pattern></defs><rect width="60" height="60" fill="url(%23grid)"/></svg>');
+    animation: moveBackground 20s linear infinite;
+  }
+
+  @keyframes moveBackground {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(60px, 60px); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    animation: fadeInUp 1s ease-out;
+    text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
+    letter-spacing: -1px;
+  }
+
+  .hero-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+    animation: fadeInUp 1s ease-out 0.3s backwards;
+    line-height: 1.6;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta {
+    animation: fadeInUp 1s ease-out 0.6s backwards;
+  }
+
+  .btn-hero {
+    padding: 16px 45px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn-hero:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-hero-primary {
+    background: white;
+    color: var(--primary-color);
+    border: 3px solid white;
+  }
+
+  .btn-hero-primary:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    color: var(--primary-color);
+  }
+
+  .btn-hero-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-hero-secondary:hover {
+    background: white;
+    color: var(--primary-color);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Features Section */
+  .features-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, var(--light-bg) 0%, #ffffff 100%);
+    position: relative;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 4.5rem;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 45px 35px;
+    border-radius: 20px;
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.05), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .feature-card:hover::before {
+    left: 100%;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    border-color: var(--primary-color);
+    box-shadow: 0 20px 50px rgba(99, 102, 241, 0.25);
+  }
+
+  .feature-icon {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    color: white;
+    transition: all 0.4s ease;
+    animation: float 3s ease-in-out infinite;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+  }
+
+  .feature-card:hover .feature-icon {
+    transform: rotateY(360deg) scale(1.1);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+  }
+
+  .feature-card:nth-child(2) .feature-icon {
+    background: linear-gradient(135deg, var(--success-color), #059669);
+    animation-delay: 0.5s;
+  }
+
+  .feature-card:nth-child(3) .feature-icon {
+    background: linear-gradient(135deg, var(--accent-color), #be185d);
+    animation-delay: 1s;
+  }
+
+  .feature-card:nth-child(4) .feature-icon {
+    background: linear-gradient(135deg, var(--warning-color), #d97706);
+    animation-delay: 1.5s;
+  }
+
+  .feature-card:nth-child(5) .feature-icon {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    animation-delay: 2s;
+  }
+
+  .feature-card:nth-child(6) .feature-icon {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    animation-delay: 2.5s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+  }
+
+  .feature-card:hover .feature-title {
+    color: var(--primary-color);
+  }
+
+  .feature-description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+
+  /* User Types Section */
+  .user-types-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #ffffff 0%, var(--light-bg) 100%);
+  }
+
+  .user-card {
+    background: white;
+    border-radius: 25px;
+    padding: 50px 35px;
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid #e2e8f0;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .user-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transform: scaleX(0);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .user-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+
+  .user-card:hover::after {
+    width: 500px;
+    height: 500px;
+  }
+
+  .user-card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 25px 60px rgba(99, 102, 241, 0.25);
+    border-color: var(--primary-color);
+  }
+
+  .user-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .user-icon {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    color: white;
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s ease;
+    box-shadow: 0 10px 35px rgba(99, 102, 241, 0.4);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      box-shadow: 0 10px 35px rgba(99, 102, 241, 0.4);
+    }
+    50% {
+      box-shadow: 0 15px 45px rgba(99, 102, 241, 0.6);
+    }
+  }
+
+  .user-card:hover .user-icon {
+    transform: scale(1.15) rotate(360deg);
+    box-shadow: 0 15px 50px rgba(99, 102, 241, 0.6);
+  }
+
+  .user-card:nth-child(2) .user-icon {
+    background: linear-gradient(135deg, var(--success-color), #059669);
+    animation-delay: 0.3s;
+  }
+
+  .user-card:nth-child(3) .user-icon {
+    background: linear-gradient(135deg, var(--accent-color), #be185d);
+    animation-delay: 0.6s;
+  }
+
+  .user-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
+  }
+
+  .user-card:hover .user-title {
+    color: var(--primary-color);
+  }
+
+  .user-description {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    font-size: 1.05rem;
+  }
+
+  .user-actions {
+    position: relative;
+    z-index: 1;
+  }
+
+  .user-actions .btn {
+    margin: 8px;
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .user-actions .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .user-actions .btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .user-actions .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .user-actions .btn-primary:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+  }
+
+  .user-actions .btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+  }
+
+  .user-actions .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+  }
+
+  /* Stats Section */
+  .stats-section {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-secondary) 50%, #2d3748 100%);
+    color: white;
+    padding: 80px 0;
+    margin: 0 -15px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stats-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="stats-grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="80" height="80" fill="url(%23stats-grid)"/></svg>');
+    opacity: 1;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 30px;
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s ease;
+  }
+
+  .stat-item:hover {
+    transform: translateY(-10px) scale(1.05);
+  }
+
+  .stat-number {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ffffff, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
+    background-size: 200% 200%;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .stat-label {
+    font-size: 1.15rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+
+  .stat-item:nth-child(1) .stat-number { animation-delay: 0s; }
+  .stat-item:nth-child(2) .stat-number { animation-delay: 0.5s; }
+  .stat-item:nth-child(3) .stat-number { animation-delay: 1s; }
+  .stat-item:nth-child(4) .stat-number { animation-delay: 1.5s; }
+
+  /* How It Works Section */
+  .how-it-works-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, var(--light-bg) 0%, #ffffff 100%);
+  }
+
+  .step-card {
+    text-align: center;
+    padding: 40px 25px;
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .step-card:hover {
+    transform: translateY(-10px);
+  }
+
+  .step-number {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 25px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    transition: all 0.4s ease;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .step-card:nth-child(2) .step-number {
+    background: linear-gradient(135deg, var(--success-color), #059669);
+    animation-delay: 0.3s;
+  }
+
+  .step-card:nth-child(3) .step-number {
+    background: linear-gradient(135deg, var(--accent-color), #be185d);
+    animation-delay: 0.6s;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .step-card:hover .step-number {
+    transform: scale(1.2) rotate(360deg);
+    box-shadow: 0 15px 45px rgba(99, 102, 241, 0.6);
+  }
+
+  .step-number::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    opacity: 0.3;
+    animation: ripple 2s ease-out infinite;
+  }
+
+  @keyframes ripple {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1.8);
+      opacity: 0;
+    }
+  }
+
+  .step-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+  }
+
+  .step-card:hover .step-title {
+    color: var(--primary-color);
+  }
+
+  .step-description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+
+  /* Footer */
+  .landing-footer {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-secondary) 100%);
+    color: white;
+    padding: 60px 0 30px;
+    margin: 0 -15px -20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .landing-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--success-color));
+    animation: gradientShift 5s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .footer-content {
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-content h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ffffff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 25px 0;
     display: flex;
     justify-content: center;
+    gap: 40px;
     flex-wrap: wrap;
-    margin-top: 50px;
   }
-  .card {
-    margin: 20px;
-    width: 18rem;
+
+  .footer-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+  }
+
+  .footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transition: width 0.3s ease;
+  }
+
+  .footer-links a:hover {
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .footer-links a:hover::after {
+    width: 100%;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+    
+    .btn-hero {
+      padding: 12px 30px;
+      font-size: 1rem;
+      margin: 8px 5px;
+      display: inline-block;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .feature-icon {
+      width: 75px;
+      height: 75px;
+      font-size: 2.2rem;
+    }
+
+    .user-icon {
+      width: 90px;
+      height: 90px;
+      font-size: 2.8rem;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* Scroll Reveal Animation */
+  .reveal {
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
   }
 </style>
-<div class="container card-container">
-  <!-- Admin Card -->
-  <div class="card">
-    <div class="card-body text-center">
-      <h5 class="card-title">Admin</h5>
-      <p class="card-text">Login as an admin.</p>
-      <a href="/login" class="btn btn-primary">Login</a>
-    </div>
-  </div>
 
-  <!-- Sponsor Card -->
-  <div class="card">
-    <div class="card-body text-center">
-      <h5 class="card-title">Sponsor</h5>
-      <p class="card-text">Login or sign up as a sponsor.</p>
-      <a href="/login" class="btn btn-primary">Login</a>
-      <a href="/sponsor_signup" class="btn btn-secondary">Sign Up</a>
-    </div>
-  </div>
-
-  <!-- Influencer Card -->
-  <div class="card">
-    <div class="card-body text-center">
-      <h5 class="card-title">Influencer</h5>
-      <p class="card-text">Login or sign up as an influencer.</p>
-      <a href="/login" class="btn btn-primary">Login</a>
-      <a href="/influencer_signup" class="btn btn-secondary">Sign Up</a>
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">Connect Brands with Influencers</h1>
+    <p class="hero-subtitle">The ultimate platform for influencer engagement and sponsor coordination. Build authentic partnerships that drive results.</p>
+    <div class="hero-cta">
+      <a href="#get-started" class="btn btn-hero btn-hero-primary">Get Started</a>
+      <a href="#how-it-works" class="btn btn-hero btn-hero-secondary">Learn More</a>
     </div>
   </div>
 </div>
 
+<!-- Features Section -->
+<div class="features-section">
+  <div class="container">
+    <h2 class="section-title">Why Choose IESCP?</h2>
+    <p class="section-subtitle">Everything you need to manage influencer campaigns and sponsorships in one powerful platform</p>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Smart Matching</h3>
+          <p class="feature-description">Our intelligent algorithm connects sponsors with the perfect influencers based on industry, audience, and campaign goals.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Campaign Analytics</h3>
+          <p class="feature-description">Track performance, measure ROI, and gain insights with comprehensive analytics and reporting tools.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">💼</div>
+          <h3 class="feature-title">Streamlined Management</h3>
+          <p class="feature-description">Manage campaigns, ad requests, and communications all in one centralized dashboard.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">Secure Platform</h3>
+          <p class="feature-description">Your data is protected with enterprise-grade security. Safe, reliable, and trustworthy.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">Easy Communication</h3>
+          <p class="feature-description">Built-in messaging and collaboration tools to keep everyone on the same page.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Quick Setup</h3>
+          <p class="feature-description">Get started in minutes. No complicated setup or lengthy onboarding process required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">10K+</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">5K+</div>
+          <div class="stat-label">Campaigns</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">15K+</div>
+          <div class="stat-label">Collaborations</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="how-it-works-section" id="how-it-works">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Get started in three simple steps</p>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Create Your Account</h3>
+          <p class="step-description">Sign up as a sponsor or influencer. Complete your profile with relevant information.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">Find Perfect Matches</h3>
+          <p class="step-description">Browse campaigns or influencers. Use filters to find the perfect collaboration opportunity.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Start Collaborating</h3>
+          <p class="step-description">Connect, negotiate, and launch campaigns. Track progress and measure success together.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- User Types Section (Get Started) -->
+<div class="user-types-section" id="get-started">
+  <div class="container">
+    <h2 class="section-title">Join Our Platform</h2>
+    <p class="section-subtitle">Choose your role and start building powerful partnerships today</p>
+    
+    <div class="row g-4">
+      <!-- Admin Card -->
+      <div class="col-md-4">
+        <div class="user-card">
+          <div class="user-icon">👑</div>
+          <h3 class="user-title">Admin</h3>
+          <p class="user-description">Manage the entire platform, oversee users, monitor campaigns, and ensure smooth operations.</p>
+          <div class="user-actions">
+            <a href="/login" class="btn btn-primary">Admin Login</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sponsor Card -->
+      <div class="col-md-4">
+        <div class="user-card">
+          <div class="user-icon">💼</div>
+          <h3 class="user-title">Sponsor</h3>
+          <p class="user-description">Find influencers for your brand, create campaigns, and track performance to maximize your marketing ROI.</p>
+          <div class="user-actions">
+            <a href="/login" class="btn btn-primary">Login</a>
+            <a href="/sponsor_signup" class="btn btn-outline-primary">Sign Up</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Influencer Card -->
+      <div class="col-md-4">
+        <div class="user-card">
+          <div class="user-icon">⭐</div>
+          <h3 class="user-title">Influencer</h3>
+          <p class="user-description">Discover exciting brand partnerships, monetize your influence, and grow your audience with quality campaigns.</p>
+          <div class="user-actions">
+            <a href="/login" class="btn btn-primary">Login</a>
+            <a href="/influencer_signup" class="btn btn-outline-primary">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="landing-footer">
+  <div class="container">
+    <div class="footer-content">
+      <h4>Influencer Engagement & Sponsor Coordination Platform</h4>
+      <p style="color: #9ca3af; margin-top: 10px;">Connecting brands with influencers for authentic partnerships</p>
+      
+      <ul class="footer-links">
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#get-started">Get Started</a></li>
+        <li><a href="/login">Login</a></li>
+      </ul>
+    </div>
+    
+    <div style="border-top: 1px solid #374151; padding-top: 20px; color: #9ca3af;">
+      <p>&copy; 2025 IESCP. All rights reserved.</p>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
